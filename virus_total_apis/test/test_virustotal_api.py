@@ -41,9 +41,17 @@ class InitTests(TestCase):
 
     def test_md5_hash(self):
         vt = PublicApi(API_KEY)
-
         try:
             print(json.dumps(vt.get_file_report(EICAR_MD5), sort_keys=False, indent=4))
+        except Exception as e:
+            self.fail(e)
+
+
+    def test_md5_hashes(self):
+        vt = PublicApi(API_KEY)
+
+        try:
+            print(json.dumps(vt.get_file_report(['fc3242be666d669e963eb87a6d8d20b6decf93cb', 'f1906392c1d81d402fe38235a908cd19349481f3']), sort_keys=False, indent=4))
         except Exception as e:
             self.fail(e)
 

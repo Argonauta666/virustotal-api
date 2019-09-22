@@ -123,11 +123,14 @@ class PublicApi():
         i.e. {'resource': '99017f6eebbac24f351415dd410d522d, 88817f6eebbac24f351415dd410d522d'}.
 
         :param this_hash: The md5/sha1/sha256/scan_ids hash of the file whose dynamic behavioural report you want to
-                            retrieve or scan_ids from a previous call to scan_file.
+                            retrieve or scan_ids from a previous call to scan_file or a list of hashes.
         :param timeout: The amount of time in seconds the request should wait before timing out.
 
         :return:
         """
+        if isinstance(this_hash, list):
+            this_hash = ", ".join(this_hash)
+        
         params = {'apikey': self.api_key, 'resource': this_hash}
 
         try:
