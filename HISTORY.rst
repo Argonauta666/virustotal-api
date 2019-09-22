@@ -3,6 +3,13 @@
 Release History
 ---------------
 
+1.1.11 (2019-09-22)
+-------------------
+
+**Allow for hash list input in get_file_report**
+
+- https://github.com/blacktop/virustotal-api/pull/28 (credit: @CDuPlooy)
+
 1.1.10 (2018-03-12)
 -------------------
 

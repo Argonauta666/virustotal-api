@@ -20,8 +20,8 @@ response = vt.get_file_report('44cda81782dc2a346abd7b2285530c5f')
 print json.dumps(response, sort_keys=False, indent=4)
 """
 
-import os
 import json
+import os
 from datetime import datetime, timedelta
 
 try:
@@ -114,7 +114,7 @@ class PublicApi():
 
         return _return_response_and_status_code(response)
 
-    def get_file_report(self, this_hash, timeout=None):
+    def get_file_report(self, hash_or_list, timeout=None):
         """ Get the scan results for a file.
 
         You can also specify a CSV list made up of a combination of hashes and scan_ids
@@ -126,12 +126,12 @@ class PublicApi():
                             retrieve or scan_ids from a previous call to scan_file or a list of hashes.
         :param timeout: The amount of time in seconds the request should wait before timing out.
 
-        :return:
+        :return: JSON response that contains files report(s)
         """
-        if isinstance(this_hash, list):
-            this_hash = ", ".join(this_hash)
-        
-        params = {'apikey': self.api_key, 'resource': this_hash}
+        if isinstance(hash_or_list, list):
+            hash_or_list = ", ".join(hash_or_list)
+
+        params = {'apikey': self.api_key, 'resource': hash_or_list}
 
         try:
             response = requests.get(self.base + 'file/report', params=params, proxies=self.proxies, timeout=timeout)
@@ -227,10 +227,8 @@ class PublicApi():
         params = {'apikey': self.api_key, 'ip': this_ip}
 
         try:
-            response = requests.get(self.base + 'ip-address/report',
-                                    params=params,
-                                    proxies=self.proxies,
-                                    timeout=timeout)
+            response = requests.get(
+                self.base + 'ip-address/report', params=params, proxies=self.proxies, timeout=timeout)
         except requests.RequestException as e:
             return dict(error=str(e))
 
@@ -314,10 +312,8 @@ class PrivateApi(PublicApi):
         params = {'apikey': self.api_key}
 
         try:
-            response = requests.get(self.base + 'file/scan/upload_url',
-                                    params=params,
-                                    proxies=self.proxies,
-                                    timeout=timeout)
+            response = requests.get(
+                self.base + 'file/scan/upload_url', params=params, proxies=self.proxies, timeout=timeout)
             if response.status_code == requests.codes.ok:
                 return response.json().get('upload_url')
             else:
@@ -457,10 +453,8 @@ class PrivateApi(PublicApi):
         params = {'apikey': self.api_key, 'hash': this_hash}
 
         try:
-            response = requests.get(self.base + 'file/network-traffic',
-                                    params=params,
-                                    proxies=self.proxies,
-                                    timeout=timeout)
+            response = requests.get(
+                self.base + 'file/network-traffic', params=params, proxies=self.proxies, timeout=timeout)
         except requests.RequestException as e:
             return dict(error=str(e))
 
@@ -571,10 +565,8 @@ class PrivateApi(PublicApi):
         params = {'apikey': self.api_key, 'before': before, 'after': after, 'reports': reports, 'limit': limit}
 
         try:
-            response = requests.get(self.base + 'file/distribution',
-                                    params=params,
-                                    proxies=self.proxies,
-                                    timeout=timeout)
+            response = requests.get(
+                self.base + 'file/distribution', params=params, proxies=self.proxies, timeout=timeout)
         except requests.RequestException as e:
             return dict(error=str(e))
 
@@ -682,10 +674,8 @@ class PrivateApi(PublicApi):
         params = {'apikey': self.api_key, 'after': after, 'reports': reports, 'limit': limit}
 
         try:
-            response = requests.get(self.base + 'url/distribution',
-                                    params=params,
-                                    proxies=self.proxies,
-                                    timeout=timeout)
+            response = requests.get(
+                self.base + 'url/distribution', params=params, proxies=self.proxies, timeout=timeout)
         except requests.RequestException as e:
             return dict(error=str(e))
 
@@ -741,10 +731,8 @@ class PrivateApi(PublicApi):
         params = {'apikey': self.api_key, 'ip': this_ip}
 
         try:
-            response = requests.get(self.base + 'ip-address/report',
-                                    params=params,
-                                    proxies=self.proxies,
-                                    timeout=timeout)
+            response = requests.get(
+                self.base + 'ip-address/report', params=params, proxies=self.proxies, timeout=timeout)
         except requests.RequestException as e:
             return dict(error=str(e))
 
@@ -824,10 +812,8 @@ class IntelApi():
         params = {'query': query, 'apikey': self.api_key, 'page': page}
 
         try:
-            response = requests.get(self.base + 'search/programmatic/',
-                                    params=params,
-                                    proxies=self.proxies,
-                                    timeout=timeout)
+            response = requests.get(
+                self.base + 'search/programmatic/', params=params, proxies=self.proxies, timeout=timeout)
         except requests.RequestException as e:
             return dict(error=str(e))
 
@@ -848,11 +834,8 @@ class IntelApi():
         params = {'hash': file_hash, 'apikey': self.api_key}
 
         try:
-            response = requests.get(self.base + 'download/',
-                                    params=params,
-                                    proxies=self.proxies,
-                                    stream=True,
-                                    timeout=timeout)
+            response = requests.get(
+                self.base + 'download/', params=params, proxies=self.proxies, stream=True, timeout=timeout)
         except requests.RequestException as e:
             return dict(error=str(e))
 
@@ -898,10 +881,8 @@ class IntelApi():
         """
         params = {'apikey': self.api_key, 'next': page}
         try:
-            response = requests.get(self.base + 'hunting/notifications-feed/',
-                                    params=params,
-                                    proxies=self.proxies,
-                                    timeout=timeout)
+            response = requests.get(
+                self.base + 'hunting/notifications-feed/', params=params, proxies=self.proxies, timeout=timeout)
             # VT returns an empty result, len(content)==0, and status OK if there are no pending notifications.
             # To keep the API consistent we generate an empty object instead.
             # This might not be necessary with a later release of the VTI API. (bug has been submitted)
@@ -966,8 +947,8 @@ def _return_response_and_status_code(response, json_results=True):
         return dict(results=response.json() if json_results else response.content, response_code=response.status_code)
     elif response.status_code == 400:
         return dict(
-                error='package sent is either malformed or not within the past 24 hours.',
-                response_code=response.status_code)
+            error='package sent is either malformed or not within the past 24 hours.',
+            response_code=response.status_code)
     elif response.status_code == 204:
         return dict(
             error='You exceeded the public API request rate limit (4 requests of any nature per minute)',
