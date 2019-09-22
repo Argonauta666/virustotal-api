@@ -140,4 +140,4 @@ Please update the `HISTORY.rst <https://github.com/blacktop/virustotal-api/blob/
 License
 -------
 
-MIT Copyright (c) 2014-2017 **blacktop**
+MIT Copyright (c) 2014-2019 **blacktop**
